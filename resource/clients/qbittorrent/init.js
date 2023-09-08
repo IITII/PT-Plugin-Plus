@@ -1,3 +1,5 @@
+import parseTorrent from 'parse-torrent'
+
 /**
  * @see https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation
  */
@@ -22,6 +24,8 @@
           this.options.address.length - 1
         );
       }
+
+      parseTorrent('d2474e86c95b19b8bcfdb92bc12c9d44667cfa36')
 
       console.log("qBittorrent.init", this.options.address);
     }
@@ -118,6 +122,7 @@
           }
         },
         error: (jqXHR, textStatus, errorThrown) => {
+          console.log('exec failed', jqXHR.status, textStatus, errorThrown)
           switch (jqXHR.status) {
             // Unsupported Media Type
             case 415:
@@ -217,10 +222,7 @@
               },
               resultData
             );
-            if (
-              (!resultData.error && resultData.result) ||
-              resultData == "Ok."
-            ) {
+            if ((!resultData.error && resultData.result) || resultData == "Ok.") {
               result.status = "success";
               result.msg = i18n.t("downloadClient.addURLSuccess", {
                 name: this.options.name
